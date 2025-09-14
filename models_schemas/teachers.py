@@ -1,0 +1,26 @@
+from sqlmodel import SQLModel, Field
+
+#table creation
+
+class Teacher (SQLModel, table=True):
+    id :  int | None = Field(primary_key=True, default=None)
+    name : str
+    salary : float
+    subject_id : int = Field(foreign_key="subject.id") 
+
+#schemas creation 
+
+class CreateTeacher (SQLModel):
+    name : str
+    salary : float
+    subject_id : int 
+
+class ReadTeacher (SQLModel):
+    name : str
+    salary : float
+    subject_id : int 
+
+class UpdateTeacher (SQLModel):
+    name : str | None = None
+    salary : float | None = None
+    subject_id : int | None = None
