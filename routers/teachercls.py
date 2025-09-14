@@ -5,7 +5,7 @@ from database import createSession
 
 router = APIRouter()
 
-@router.get('/teachercls/{id}', response_model=ReadTeachercls)
+@router.get('/teacherclasses/{id}', response_model=ReadTeachercls)
 def get_Teachercls(id : int, session: Session = Depends(createSession)):
     teachercls = session.exec(select(TeacherClass).where(TeacherClass.id == id)).one_or_none()
     if teachercls is None:
@@ -19,7 +19,7 @@ def get_all_Teachercls(session: Session = Depends(createSession)):
     return all_teachercls
 
 
-@router.post('/post_Teacherclass', response_model=ReadTeachercls)
+@router.post('/teacherclasses', response_model=ReadTeachercls)
 def add_Teachercls(teachercls : CreateTeachercls, session: Session =  Depends(createSession)):
     obj = Subject(**teachercls.model_dump())
     session.add(obj)
@@ -27,7 +27,7 @@ def add_Teachercls(teachercls : CreateTeachercls, session: Session =  Depends(cr
     session.refresh(obj)    
 
 
-@router.put('/update_teachercls/{id}', response_model=ReadTeachercls)
+@router.put('/teacherclasses/{id}', response_model=ReadTeachercls)
 def update_Teachercls(id : int, teacherclsupdate : UpdateTeachercls, session: Session = Depends(createSession)):
     teachercls = session.get(Subject, id)
     if teachercls is None:
@@ -39,7 +39,7 @@ def update_Teachercls(id : int, teacherclsupdate : UpdateTeachercls, session: Se
         return teachercls
     
 
-@router.delete('/delete_teacherclass/{id}', response_model=dict)
+@router.delete('/teacherclasses/{id}', response_model=dict)
 def delete_Teachercls(id : int, session: Session = Depends(createSession)):
     teachercls = session.get(teachercls, id)
     if teachercls is None:
