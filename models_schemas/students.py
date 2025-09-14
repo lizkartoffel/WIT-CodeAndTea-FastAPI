@@ -1,9 +1,9 @@
 from sqlmodel import SQLModel, Field
-
+from typing import Optional
 #table creation
 
 class Student (SQLModel, table=True):
-    id :  int | None = Field(primary_key=True, default=None)
+    id : Optional[int] = Field(primary_key=True, default=None)
     name : str
     age : int
     phone_number : str | None = None

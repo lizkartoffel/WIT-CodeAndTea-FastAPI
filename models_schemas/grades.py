@@ -1,9 +1,10 @@
 from sqlmodel import SQLModel, Field
+from typing import Optional
 
 #table creation
 
 class Grade (SQLModel, table=True):
-    id :  int | None = Field(primary_key=True, default=None)
+    id : Optional[int] = Field(primary_key=True, default=None)
     student_id : int = Field(foreign_key="student.id")
     subject_id : int = Field(foreign_key="subject.id")
     grade : int 
