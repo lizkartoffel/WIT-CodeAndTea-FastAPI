@@ -20,11 +20,24 @@ def get_all_Grades(session: Session = Depends(createSession)):
     
 
 @router.post('/grades', response_model=ReadGrade)
-def add_Grade(grade : CreateGrade, session: Session = Depends(createSession)):
+def add_Grade(grade : CreateGrade, session: Session = Depends(createSession)):  
+
+   #We don’t do Grade.student_id because class attributes in SQLModel are descriptors (they describe the column), while instance attributes hold the actual data. 
+
+    student = session.get(Student, grade.student_id)
+    if student is None:
+        raise HTTPException(status_code=400, detail="Student does not exist")
+
+    subject = session.get(Subject, grade.subject_id)
+    if subject is None:
+        raise HTTPException(status_code=400, detail="Subject does not exist")
+
+
     obj = Grade(**grade.model_dump())
     session.add(obj)
     session.commit()
     session.refresh(obj)    
+    return obj
 
 
 @router.put('/grades/{id}', response_model=ReadGrade)
@@ -33,13 +46,13 @@ def update_Grade(id : int, gradeupdate : UpdateGrade, session: Session = Depends
     if grade is None:
         raise HTTPException(status_code=404, detail=f"No class with id {id}")
     else:
-        grade.sqlmodel_update(gradeupdate.model_dump())
+        grade.sqlmodel_update(gradeupdate.model_dump(exclude_unset=True))
         session.commit()
         session.refresh(grade)
         return grade
         
 
-@router.delete('/grades/{id}', response_model=dict)
+@router.delete('/grades/{id}', response_model=DeleteResponse)
 def delete_Grade(id : int, session: Session = Depends(createSession)):
     grade = session.get(Grade, id)
     if grade is None:
@@ -47,4 +60,4 @@ def delete_Grade(id : int, session: Session = Depends(createSession)):
     else:
         session.delete(grade)
         session.commit()
-        return {"Message" : "Deleted grade with id: {id}"}
+        return DeleteResponse(message = f"Deleted grade with id: {id}")

@@ -21,30 +21,40 @@ def get_all_Teachercls(session: Session = Depends(createSession)):
 
 @router.post('/teacherclasses', response_model=ReadTeachercls)
 def add_Teachercls(teachercls : CreateTeachercls, session: Session =  Depends(createSession)):
-    obj = Subject(**teachercls.model_dump())
+
+    teacher = session.get(Teacher, teachercls.teacher_id)
+    if teacher is None:
+        raise HTTPException(status_code=400, detail="Teacher does not exist")
+
+    classroom = session.get(Classroom, teachercls.class_id)
+    if classroom is None:
+        raise HTTPException(status_code=400, detail="Class does not exist")
+
+    obj = TeacherClass(**teachercls.model_dump())
     session.add(obj)
     session.commit()
     session.refresh(obj)    
+    return obj
 
 
 @router.put('/teacherclasses/{id}', response_model=ReadTeachercls)
 def update_Teachercls(id : int, teacherclsupdate : UpdateTeachercls, session: Session = Depends(createSession)):
-    teachercls = session.get(Subject, id)
+    teachercls = session.get(TeacherClass, id)
     if teachercls is None:
         raise HTTPException(status_code=404, detail=f"No teacher class with id {id}")
     else:
-        teachercls.sqlmodel_update(teacherclsupdate.model_dump())
+        teachercls.sqlmodel_update(teacherclsupdate.model_dump(exclude_unset=True))
         session.commit()
         session.refresh(teachercls)
         return teachercls
     
 
-@router.delete('/teacherclasses/{id}', response_model=dict)
+@router.delete('/teacherclasses/{id}', response_model=DeleteResponse)
 def delete_Teachercls(id : int, session: Session = Depends(createSession)):
-    teachercls = session.get(teachercls, id)
+    teachercls = session.get(TeacherClass, id)
     if teachercls is None:
         raise HTTPException(status_code=404, detail=f"No teacher class with id {id}")
     else:
         session.delete(teachercls)
         session.commit()
-        return {"Message" : "Deleted teacher class with id: {id}"}
+        return DeleteResponse(message = f"Deleted teacher class with id: {id}")

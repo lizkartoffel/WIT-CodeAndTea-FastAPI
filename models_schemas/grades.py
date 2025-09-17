@@ -23,6 +23,6 @@ class ReadGrade (SQLModel):
     grade : int
 
 class UpdateGrade (SQLModel):
-    student_id : int | None = None
-    subject_id : int | None = None
-    grade : int | None = None 
+    student_id : Optional[int] = None
+    subject_id : Optional[int] = None
+    grade : Optional[int] = None 

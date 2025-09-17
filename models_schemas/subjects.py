@@ -17,4 +17,4 @@ class ReadSubject (SQLModel):
     name : str  
 
 class UpdateSubject (SQLModel):
-    name : str | None = None
+    name : Optional[str] = None

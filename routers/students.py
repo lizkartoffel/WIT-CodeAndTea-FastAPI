@@ -21,10 +21,17 @@ def get_all_Students(session: Session = Depends(createSession)):
 
 @router.post('/students', response_model= ReadStudent)
 def add_Student(student : CreateStudent, session: Session = Depends(createSession)):
+
+    classroom = session.get(Classroom, student.class_id)
+    if classroom is None:
+        raise HTTPException(status_code=400, detail="Class does not exist") #check if the class id exists before trying to add (bc of foreign key)
+    
+    
     obj = Student(**student.model_dump())
     session.add(obj)
     session.commit()
-    session.refresh(obj)    
+    session.refresh(obj)
+    return obj    
     
 
 @router.put('/students/{id}', response_model= ReadStudent)
@@ -33,13 +40,13 @@ def update_Student(id : int, studentupdate : UpdateStudent, session: Session = D
     if student is None:
         raise HTTPException(status_code=404, detail=f"No student with id {id}")
     else:
-        student.sqlmodel_update(studentupdate.model_dump())
+        student.sqlmodel_update(studentupdate.model_dump(exclude_unset=True))
         session.commit()
         session.refresh(student)
         return student
     
 
-@router.delete('/students/{id}', response_model= ReadStudent)
+@router.delete('/students/{id}', response_model= DeleteResponse)
 def delete_Student(id : int, session: Session = Depends(createSession)):
     student = session.get(Student, id)
     if student is None:
@@ -47,4 +54,4 @@ def delete_Student(id : int, session: Session = Depends(createSession)):
     else:
         session.delete(student)
         session.commit()
-        return {"Message" : "Deleted student with id: {id}"}
+        return DeleteResponse(message = f"Deleted student with id: {id}")

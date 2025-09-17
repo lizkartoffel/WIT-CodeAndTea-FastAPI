@@ -25,7 +25,7 @@ class ReadStudent (SQLModel):
     class_id : int 
 
 class UpdateStudent (SQLModel):
-    name : str | None = None
-    age :  int | None = None
-    phone_number : str | None = None
-    class_id : int | None = None
+    name : Optional[str] = None
+    age : Optional[int] = None
+    phone_number : Optional[int] = None
+    class_id : Optional[int] = None

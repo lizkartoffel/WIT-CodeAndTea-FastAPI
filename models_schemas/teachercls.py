@@ -20,5 +20,5 @@ class ReadTeachercls (SQLModel):
     class_id : int 
 
 class UpdateTeachercls (SQLModel):
-    teacher_id : int | None = None
-    class_id : int | None = None
+    teacher_id : Optional[int] = None
+    class_id : Optional[int] = None

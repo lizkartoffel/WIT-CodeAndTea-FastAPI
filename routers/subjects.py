@@ -25,6 +25,7 @@ def add_Subject(subject : CreateSubject, session: Session = Depends(createSessio
     session.add(obj)
     session.commit()
     session.refresh(obj)    
+    return obj
 
 
 @router.put('/subjects/{id}', response_model=ReadSubject)
@@ -33,13 +34,13 @@ def update_Subject(id : int, subjectupdate : UpdateSubject, session: Session = D
     if subject is None:
         raise HTTPException(status_code=404, detail=f"No subject with id {id}")
     else:
-        subject.sqlmodel_update(subjectupdate.model_dump())
+        subject.sqlmodel_update(subjectupdate.model_dump(exclude_unset=True))
         session.commit()
         session.refresh(subject)
         return subject
         
 
-@router.delete('/subjects/{id}', response_model=dict)
+@router.delete('/subjects/{id}', response_model=DeleteResponse)
 def delete_Subject(id : int, session: Session = Depends(createSession)):
     subject = session.get(Subject, id)
     if subject is None:
@@ -47,4 +48,4 @@ def delete_Subject(id : int, session: Session = Depends(createSession)):
     else:
         session.delete(subject)
         session.commit()
-        return {"Message" : "Deleted subject with id: {id}"}
+        return DeleteResponse(message = f"Deleted subject with id: {id}")

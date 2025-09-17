@@ -9,3 +9,8 @@ from .classes import ClassCreate,ClassRead, ClassUpdate,Classroom
 # Allows relative imports
 # Lets you re-export things for cleaner imports
 # W/o it can’t do from routers import * cleanly
+
+from sqlmodel import SQLModel
+
+class DeleteResponse (SQLModel):
+    message : str

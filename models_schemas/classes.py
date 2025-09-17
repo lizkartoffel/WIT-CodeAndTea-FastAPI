@@ -17,4 +17,4 @@ class ClassRead (SQLModel):
     name: str 
 
 class ClassUpdate (SQLModel):
-    name: str | None = None   # optional, so user can send only the fields they want
+    name: Optional[str] = None   # optional, so user can send only the fields they want

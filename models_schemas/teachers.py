@@ -22,6 +22,6 @@ class ReadTeacher (SQLModel):
     subject_id : int 
 
 class UpdateTeacher (SQLModel):
-    name : str | None = None
-    salary : float | None = None
-    subject_id : int | None = None
+    name : Optional[str] = None
+    salary : Optional[float] = None
+    subject_id : Optional[int] = None
