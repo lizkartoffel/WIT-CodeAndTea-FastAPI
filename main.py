@@ -20,5 +20,7 @@ app.include_router(teachercls.router)
 # because of foreign keys there should be an order to input data w/o causing issues 
 # Classes → Subjects → Teachers → Students → TeacherCls → Grades
 
-# what about deleteing a class if there's students in it?
-# and should i add error handling if insertion is done in the wrong order?
+
+
+# and should i add error handling if insertion is done in the wrong order? Done!! in post check if its there THEN add
+# do i need error handling for deleting something related to smthing else with a foreign key? rn cant remove student if he has grades for example
