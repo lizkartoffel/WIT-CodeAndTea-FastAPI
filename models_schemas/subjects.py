@@ -10,11 +10,17 @@ class Subject (SQLModel, table=True):
 #schemas creation
 
 class CreateSubject (SQLModel):
-    name : str
+    name : str = Field(..., example="ahmed")
 
 class ReadSubject (SQLModel):
-    id :  int 
-    name : str  
+    id :  int = Field(..., example=1)
+    name : str  = Field(..., example="ahmed")
+
+    class Config:
+        orm_mode = True
 
 class UpdateSubject (SQLModel):
-    name : Optional[str] = None
+    name : Optional[str] = Field(None, example="ahmed")
+
+    class Config:
+        orm_mode = True

@@ -51,7 +51,13 @@ def delete_Student(id : int, session: Session = Depends(createSession)):
     student = session.get(Student, id)
     if student is None:
         raise HTTPException(status_code=404, detail=f"No student with id {id}")
-    else:
-        session.delete(student)
-        session.commit()
-        return DeleteResponse(message = f"Deleted student with id: {id}")
+    
+
+    grades = session.exec(select(Grade).where(Grade.student_id == id)).all()
+    if grades:
+        raise HTTPException(status_code=400, detail=f"Cannot delete student {id} because they have grades")
+
+
+    session.delete(student)
+    session.commit()
+    return DeleteResponse(message = f"Deleted student with id: {id}")

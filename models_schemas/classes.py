@@ -10,11 +10,17 @@ class Classroom (SQLModel, table=True):
 #schemas creation
 
 class ClassCreate (SQLModel):
-    name : str
+    name : str = Field(..., example="Class 1")
 
 class ClassRead (SQLModel): 
-    id: int
-    name: str 
+    id: int = Field(..., example=1)
+    name: str = Field(..., example="Class 1")
+    
+    class Config:
+        orm_mode = True
 
 class ClassUpdate (SQLModel):
-    name: Optional[str] = None   # optional, so user can send only the fields they want
+    name: Optional[str] = Field(None, example="Class 2")   # optional, so user can send only the fields they want
+
+    class Config:
+        orm_mode = True
