@@ -23,4 +23,5 @@ app.include_router(teachercls.router)
 
 
 # and should i add error handling if insertion is done in the wrong order? Done!! in post check if its there THEN add
-# do i need error handling for deleting something related to smthing else with a foreign key? rn cant remove student if he has grades for example
+# do i need error handling for deleting something related to smthing else with a foreign key? rn cant remove student if he has grades for example Done!!
+# if i remove error handling for grades, the grades will exist without students? no db error/ this is fine
